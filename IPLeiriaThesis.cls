@@ -20,13 +20,13 @@
 
 \keys_define:nn { IPLeiriaThesis } {
     school .choices:nn =
-        { estg, esecs, esslei, esad, estm }
+        { eniad, esecs, esslei, esad, estm }
         { \tl_gset:Nn \g_IPLeiriaThesis_myschool_tl { #1 } },
     school / unknown .code:n = 
         { \ClassWarningNoLine{IPLeiriaThesis}
-        {Specified~'school'~not~available.~Defaulting~to~'estg'} },
-    school .default:n = { estg },
-    school .initial:n = { estg },
+        {Specified~'school'~not~available.~Defaulting~to~'eniad'} },
+    school .default:n = { eniad },
+    school .initial:n = { eniad },
 
     coverstyle .choices:nn =
         { classic, bw }
