@@ -6,10 +6,10 @@
     \thispagestyle{empty}%
     \vspace*{\fill}
     \begin{center}
-        \ifthenelse{\equal{\LanguageOption}{portuguese}}{%
-            \textcolor{gray!50}{\textit{Página intencionalmente deixada em branco.}}
+        \ifthenelse{\equal{\LanguageOption}{french}}{%
+            \textcolor{gray!50}{\textit{Page laissée intentionnellement blanche}}
         }{%
-            \textcolor{gray!50}{\textit{This page intentionally left blank.}}
+            \textcolor{gray!50}{\textit{This page is intentionally left blank}}
         }
     \end{center}
     \vspace*{\fill}
@@ -21,8 +21,8 @@
 
 % Indicates that a writing guide will be displayed.
 \newcommand{\guideinfo}[1]{%
-    \ifthenelse{\equal{\LanguageOption}{portuguese}}{%
-        \noindent\textcolor{note}{\faInfoCircle\ \textbf{Orientação Para a Escrita}}%
+    \ifthenelse{\equal{\LanguageOption}{french}}{%
+        \noindent\textcolor{note}{\faInfoCircle\ \textbf{Orientation pour l'Écriture}}%
     }{
         \noindent\textcolor{note}{\faInfoCircle\ \textbf{Writing Guidance}}%
     }
@@ -31,8 +31,8 @@
 }
 
 \newcommand{\exampleinfo}[1]{%
-    \ifthenelse{\equal{\LanguageOption}{portuguese}}{%
-        \noindent\textcolor{black}{\faInfoCircle\ \textbf{Exemplo de Utilização}}%
+    \ifthenelse{\equal{\LanguageOption}{french}}{%
+        \noindent\textcolor{black}{\faInfoCircle\ \textbf{Exemple d'Utilisation}}%
     }{
         \noindent\textcolor{black}{\faInfoCircle\ \textbf{Example of Use}}%
     }
@@ -42,7 +42,7 @@
 
 % Abstract keywords.
 \NewDocumentCommand{\keywordsen}{m}{\vspace{.4cm}\noindent\textbf{Keywords:} #1}
-\NewDocumentCommand{\keywordspt}{m}{\vspace{.4cm}\noindent\textbf{Palavras-Chave:} #1}
+\NewDocumentCommand{\keywordsfr}{m}{\vspace{.4cm}\noindent\textbf{Mots-Clés:} #1}
 
 % Landscape mode - the proper way!
 \def\ifGm@preamble#1{\@firstofone}
@@ -78,7 +78,7 @@
     code={\ifdefempty{\tcbtitletext}{}{\tcbset{before upper={\tcbtitle\par\medskip}}}},
 }
 
-% Capitalise the first letter in '\autoref' for both English and Portuguese.
+% Capitalise the first letter in '\autoref' for both English and French.
 \addto\extrasenglish{\def\figureautorefname{Figure}}
 \addto\extrasenglish{\def\chapterautorefname{Chapter}}
 \addto\extrasenglish{\def\sectionautorefname{Section}}
@@ -87,9 +87,9 @@
 \addto\extrasenglish{\def\tableautorefname{Table}}
 \addto\extrasenglish{\def\partautorefname{Part}}
 \addto\extrasenglish{\def\appendixautorefname{Appendix}}
-\addto\extrasportuguese{\def\sectionautorefname{Secção}}
-\addto\extrasportuguese{\def\subsectionautorefname{Secção}}
-\addto\extrasportuguese{\def\subsubsectionautorefname{Secção}}
+\addto\extrasfrench{\def\sectionautorefname{Section}}
+\addto\extrasfrench{\def\subsectionautorefname{Section}}
+\addto\extrasfrench{\def\subsubsectionautorefname{Section}}
 
 % Command to overwrite the color of a given command.
 \newcommand{\overwritecolor}[2]{%
@@ -130,10 +130,10 @@
 \pretocmd{\printbibliography}{\MediaOptionLogic}{}{\fail}
 
 \NewDocumentCommand{\prompt}{o m}{%
-    \ifthenelse{\equal{\LanguageOption}{portuguese}}{%
+    \ifthenelse{\equal{\LanguageOption}{french}}{%
         \IfNoValueTF{#1}
-        {\noindent\textbf{Instrução:} #2}
-        {\noindent\textbf{Instrução #1:} #2}
+        {\noindent\textbf{Instruction:} #2}
+        {\noindent\textbf{Instruction #1:} #2}
     }{
         \IfNoValueTF{#1}
         {\noindent\textbf{Prompt:} #2}
@@ -142,10 +142,10 @@
 }
 
 \NewDocumentCommand{\aioutput}{o m}{%
-    \ifthenelse{\equal{\LanguageOption}{portuguese}}{%
+    \ifthenelse{\equal{\LanguageOption}{french}}{%
         \IfNoValueTF{#1}
-        {\noindent\textbf{Resposta:} #2}
-        {\noindent\textbf{Resposta #1:} #2}
+        {\noindent\textbf{Réponse:} #2}
+        {\noindent\textbf{Réponse #1:} #2}
     }{
         \IfNoValueTF{#1}
         {\noindent\textbf{Output:} #2}

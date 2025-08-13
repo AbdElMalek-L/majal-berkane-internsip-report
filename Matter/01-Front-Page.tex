@@ -72,7 +72,10 @@
     % Author.
     {\noindent\bfseries\fontsize{14}{19}\selectfont\GetFirstAuthor}
     
+
+    \ifdefined\GetFirstAuthorNumber
     {\noindent\itshape\fontsize{10}{10}\selectfont Student No. \GetFirstAuthorNumber}
+	\fi
 
     \ifdefined\GetSecondAuthor
         \vspace{8pt}

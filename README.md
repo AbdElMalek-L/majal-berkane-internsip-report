@@ -1,50 +1,48 @@
-<p align="center">
-    <img width="90%" src="https://github.com/joseareia/ipleiria-thesis/blob/master/Assets/04_Logo.png" alt="Logo">
-</p>
 
-<p align="center">
-    <a href="https://github.com/joseareia/ipleiria-thesis/issues/new?labels=bug" target="_blank">Report a Bug</a>
-·
-    <a href="https://github.com/joseareia/ipleiria-thesis/issues/new?labels=enhancement" target="_blank">Request a Feature</a>
-·
-    <a href="https://github.com/joseareia/ipleiria-thesis/issues/new?labels=question" target="_blank">Ask a Question</a>
-·
-    <a href="https://github.com/joseareia/ipleiria-thesis/wiki" target="_blank">Read the Wiki</a>
-</p>
+### What this project is
+- A LaTeX thesis/report template for Polytechnic University of Leiria, producing `IPLeiriaMain.pdf`.
 
-<p align="center">
-    <a href="https://www.latex-project.org"><img src="https://img.shields.io/badge/Made%20with-LaTeX-red.svg?style=flat-square"></a>
-    <a href="https://www.latex-project.org/lppl/lppl-1-3c"><img src="https://img.shields.io/badge/License-LPPL%20v1.3c-yellow.svg?style=flat-square"></a>
-    <a href="https://github.com/joseareia/ipleiria-thesis/releases"><img src="https://img.shields.io/github/v/tag/joseareia/ipleiria-thesis?style=flat-square&label=Release&color=8892BF"></a>
-    <a href="https://github.com/joseareia/ipleiria-thesis/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained-Yes-brightgreen.svg?style=flat-square"></a>
-    <a href=""><img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square"></a>
-</p>
-<br/>
+### Entry points and build
+- **Main document**: `IPLeiriaMain.tex` (includes all content, front matter, and bibliography).
+- **Class**: `IPLeiriaThesis.cls` (defines options like `school`, `language`, `chapterstyle`, `coverstyle`, `docstage`, `media`, `linkcolor`, `doctype`, `bookprint`, `aiack` and loads required packages).
+- **Build**: `latexmkrc` configures XeLaTeX with `-shell-escape`; `Makefile` wraps latexmk/rubber. Output and aux files are present in root (e.g., `.aux`, `.bbl`, `.log`, `.pdf`).
 
-<p float="left">
-<a href="https://github.com/joseareia/ipleiria-thesis">IPLeiria Thesis</a> is an open-source LaTeX template <b>designed for creating professional thesis, dissertations, and academic reports</b> specifically tailored for the <a href="https://www.ipleiria.pt/" target="_blank">Polytechnic University of Leiria</a> students. It was developed to ensure a <b>clean, aesthetically pleasing, and professional design</b> while remaining highly customizable to suit various needs. The template is also user-friendly, making it accessible even for newcomers.
+### Directory structure (purpose)
+- **`Configurations/`**: Style and behavior via `.sty` modules, loaded in order by the class
+  - `00-Fonts.sty`, `01-Colors.sty`, `02-Margins.sty`, `03-References.sty`, `04-Headers.sty`, `05-Contents.sty`, `06-Glossary.sty`, `07-Chapters.sty`, `08-Tables.sty`, `09-Code.sty` (minted/syntax highlight), `10-Macros.sty`, `11-Metadata.sty`; plus `Fonts/`.
+- **`Matter/`**: Front/back matter and global lists
+  - `00-Cover.tex`, `01-Front-Page.tex`, `02-Copyright.tex`, `03-Acknowledgements.tex`, `04-AI.tex` (AI acknowledgement), `05-Glossary.tex`, `06-Acronyms.tex`, `07-Symbols.tex`, `08-Appendices.tex`, `09-Annexes.tex`, `10-Back-Page.tex`.
+- **`Chapters/`**: Main content
+  - `00-Abstract.tex`, `01-Introduction.tex`, `02-User-Guide.tex`, `03-Latex-Tutorial.tex`, plus `Appendices/` (`00-AppendixA.tex`, `01-AppendixB.tex`) and `Annexes/` (`00-AnnexA.tex`).
+- **`Metadata/`**: `Metadata.tex` (title, author, degree, dates, etc.), included by `IPLeiriaMain.tex`.
+- **`Bibliography/`**: `Bibliography.bib`, referenced at the end of `IPLeiriaMain.tex`.
+- **`Figures/`**: Figures and theme assets; used across content.
+- **`Assets/`**: Template logos/preview images.
+- **`Code/`**: Example code listings (e.g., `Factorial.hs`) for minted.
+- Dev/config folders: `.github`, `.vscode`, `.devcontainer.json`.
 
-Curious to see it in action? Check out the <a href="https://www.overleaf.com/latex/templates/polytechnic-university-of-leiria-thesis-template/tqgbrncfhwgt" target="_blank">PDF</a> demo for a preview!
-</p>
+### How content is wired
+- `IPLeiriaMain.tex` sets class options, inputs `Metadata/Metadata`, loads glossaries/acronyms/symbols, includes front matter in `Matter/`, then chapter files in `Chapters/`, prints bibliography, then `\appendix` and includes `Appendices/` and `Annexes/`, finally back page.
+- Bibliography is printed via `\printbibliography` with title and ToC entry.
+- Code highlighting uses `minted` (requires `-shell-escape`); you’ll see a `_...data.minted` cache in root.
 
-<p align="center">
-  <img src="https://github.com/joseareia/ipleiria-thesis/blob/master/Assets/01_B.png" width="273"/>
-  <img src="https://github.com/joseareia/ipleiria-thesis/blob/master/Assets/02_B.png" width="273"/>
-  <img src="https://github.com/joseareia/ipleiria-thesis/blob/master/Assets/03_B.png" width="273"/>
-</p>
+### Typical customization points
+- **Document options**: in `\documentclass[...]` inside `IPLeiriaMain.tex` (e.g., `language=english`, `school=eniad`, `chapterstyle=classic`, etc.).
+- **Metadata**: edit `Metadata/Metadata.tex`.
+- **Chapters**: add new `Chapters/<nn>-Title.tex` and include them in `IPLeiriaMain.tex`.
+- **Bib**: add entries to `Bibliography/Bibliography.bib`.
+- **Styling**: tweak `.sty` files under `Configurations/` (colors, margins, headers, tables, code, macros).
 
-<p float="left">
-This repository contains all the <b>source code for the template</b>, organised into a clear and well-structured file hierarchy. It also includes various tools and <b>configuration files necessary for compiling</b> the template across different workspaces.
-</p>
+### Build notes
+- On Windows with latexmk: run `latexmk -pdf -xelatex -shell-escape IPLeiriaMain.tex`.
+- The `Makefile` is tailored for Unix shells but shows intended flags; `latexmkrc` already sets XeLaTeX and clean extensions.
 
-## Installation and Documentation
-This template is available online on [Overleaf](https://www.overleaf.com/latex/templates/polytechnic-university-of-leiria-thesis-template/tqgbrncfhwgt), providing a **hassle-free way to compile it without the need to install any dependencies**. If you plan to use the template locally or have any questions, please refer to our [GitHub Wiki](https://github.com/joseareia/ipleiria-thesis/wiki) for comprehensive guidance. However, before you start using the template, be sure to read the [Instructions for Using the Template](https://github.com/joseareia/ipleiria-thesis/wiki/Instructions-for-Using-the-Template) to gain a better understanding of its features and setup.
+- Adjust `Matter/05-Glossary.tex`, `06-Acronyms.tex`, `07-Symbols.tex` if you use glossaries/acronyms; `\makeglossaries` is already set.
 
-## Getting Help
-If you have any questions regarding the template, its usage, or encounter any errors you're struggling with, please feel free to open an [issue](https://github.com/joseareia/ipleiria-thesis/issues), start a new [discussion](https://github.com/joseareia/ipleiria-thesis/discussions), or email me at <a href="mailto:jose.apareia@gmail.com">jose.apareia@gmail.com</a>.
+- The repo currently includes compiled artifacts (e.g., `IPLeiriaMain.pdf`) alongside sources.
 
-## Contributing
-Contributions to this template are welcome! If you encounter any issues, have suggestions for improvements, or would like to add new features, please submit a [pull request](https://github.com/joseareia/ipleiria-thesis/pulls). We appreciate your feedback and contributions to make this template even better.
-
-## License
-The **IPLeiria Thesis** project is released under the terms of the [LPPL 1.3c License](https://www.latex-project.org/lppl/lppl-1-3c/).
+- Summary:
+  - Central entry `IPLeiriaMain.tex` orchestrates content and options.
+  - Formatting modularized in `Configurations/*.sty`, applied via `IPLeiriaThesis.cls`.
+  - Content split into `Matter/` and `Chapters/` (plus `Appendices/` and `Annexes/`).
+  - Assets and figures separated; bibliography isolated; code listings supported with minted.
