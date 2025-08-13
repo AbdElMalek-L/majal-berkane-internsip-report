@@ -1,0 +1,564 @@
+\chapter{Codes Sources et Algorithmes}
+\label{app:software-code}
+
+Ce chapitre présente les codes sources principaux et les algorithmes développés pour le système AquaDrone, incluant la logique de contrôle, la gestion des capteurs et les algorithmes de navigation.
+
+\section{Architecture logicielle générale}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figures/software-architecture/main-architecture}
+    \caption{Architecture logicielle générale du système AquaDrone}
+    \label{fig:software-architecture}
+\end{figure}
+
+\section{Programme principal (main.py)}
+\begin{lstlisting}[language=Python, caption=Programme principal du système, label=lst:main-program]
+#!/usr/bin/env python3
+"""
+Programme principal du système AquaDrone
+Auteur: AbdElMalek Lamkadem
+Date: 2024-2025
+"""
+
+import time
+import logging
+from modules.sensor_manager import SensorManager
+from modules.motor_controller import MotorController
+from modules.navigation import NavigationSystem
+from modules.communication import CommunicationManager
+from modules.data_logger import DataLogger
+
+class AquaDroneSystem:
+    def __init__(self):
+        """Initialisation du système principal"""
+        self.logger = self._setup_logging()
+        self.sensor_manager = SensorManager()
+        self.motor_controller = MotorController()
+        self.navigation = NavigationSystem()
+        self.communication = CommunicationManager()
+        self.data_logger = DataLogger()
+        
+        self.running = False
+        
+    def _setup_logging(self):
+        """Configuration du système de logging"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('aquadrone.log'),
+                logging.StreamHandler()
+            ]
+        )
+        return logging.getLogger(__name__)
+    
+    def start(self):
+        """Démarrage du système"""
+        try:
+            self.logger.info("Démarrage du système AquaDrone")
+            self.sensor_manager.initialize()
+            self.motor_controller.initialize()
+            self.navigation.initialize()
+            self.communication.initialize()
+            self.data_logger.initialize()
+            
+            self.running = True
+            self.main_loop()
+            
+        except Exception as e:
+            self.logger.error(f"Erreur lors du démarrage: {e}")
+            self.emergency_stop()
+    
+    def main_loop(self):
+        """Boucle principale du système"""
+        while self.running:
+            try:
+                # Lecture des capteurs
+                sensor_data = self.sensor_manager.read_all_sensors()
+                
+                # Traitement des données
+                processed_data = self.process_sensor_data(sensor_data)
+                
+                # Navigation et contrôle
+                navigation_commands = self.navigation.update(processed_data)
+                self.motor_controller.execute_commands(navigation_commands)
+                
+                # Communication
+                self.communication.send_data(processed_data)
+                
+                # Logging des données
+                self.data_logger.log_data(processed_data)
+                
+                time.sleep(0.1)  # 10 Hz
+                
+            except KeyboardInterrupt:
+                self.logger.info("Arrêt demandé par l'utilisateur")
+                break
+            except Exception as e:
+                self.logger.error(f"Erreur dans la boucle principale: {e}")
+                self.emergency_stop()
+                break
+    
+    def process_sensor_data(self, sensor_data):
+        """Traitement des données des capteurs"""
+        processed = {
+            'timestamp': time.time(),
+            'temperature': sensor_data.get('temperature', 0),
+            'salinity': sensor_data.get('salinity', 0),
+            'ph': sensor_data.get('ph', 0),
+            'dissolved_oxygen': sensor_data.get('dissolved_oxygen', 0),
+            'gps': sensor_data.get('gps', {}),
+            'compass': sensor_data.get('compass', 0),
+            'accelerometer': sensor_data.get('accelerometer', {})
+        }
+        return processed
+    
+    def emergency_stop(self):
+        """Arrêt d'urgence du système"""
+        self.logger.warning("Arrêt d'urgence du système")
+        self.running = False
+        self.motor_controller.stop_all_motors()
+        self.communication.send_emergency_signal()
+
+if __name__ == "__main__":
+    drone = AquaDroneSystem()
+    drone.start()
+\end{lstlisting}
+
+\section{Gestionnaire de capteurs (sensor\_manager.py)}
+\begin{lstlisting}[language=Python, caption=Gestionnaire des capteurs, label=lst:sensor-manager]
+import smbus
+import time
+from typing import Dict, Any
+
+class SensorManager:
+    def __init__(self):
+        """Initialisation du gestionnaire de capteurs"""
+        self.i2c_bus = smbus.SMBus(1)  # I2C bus 1
+        self.sensors = {}
+        self.initialize_sensors()
+    
+    def initialize_sensors(self):
+        """Initialisation de tous les capteurs"""
+        try:
+            # Capteur de température DS18B20 (1-Wire)
+            self.sensors['temperature'] = DS18B20Sensor()
+            
+            # Capteurs Atlas Scientific (I2C)
+            self.sensors['salinity'] = AtlasScientificSensor(0x64, 'salinity')
+            self.sensors['ph'] = AtlasScientificSensor(0x63, 'ph')
+            self.sensors['dissolved_oxygen'] = AtlasScientificSensor(0x61, 'do')
+            
+            # Capteurs de navigation
+            self.sensors['gps'] = GPSSensor()
+            self.sensors['compass'] = CompassSensor(0x1E)  # HMC5883L
+            self.sensors['accelerometer'] = AccelerometerSensor(0x68)  # MPU6050
+            
+        except Exception as e:
+            raise Exception(f"Erreur d'initialisation des capteurs: {e}")
+    
+    def read_all_sensors(self) -> Dict[str, Any]:
+        """Lecture de tous les capteurs"""
+        data = {}
+        for sensor_name, sensor in self.sensors.items():
+            try:
+                data[sensor_name] = sensor.read()
+            except Exception as e:
+                print(f"Erreur lecture capteur {sensor_name}: {e}")
+                data[sensor_name] = None
+        return data
+    
+    def read_sensor(self, sensor_name: str) -> Any:
+        """Lecture d'un capteur spécifique"""
+        if sensor_name in self.sensors:
+            return self.sensors[sensor_name].read()
+        return None
+
+class DS18B20Sensor:
+    """Capteur de température DS18B20"""
+    def __init__(self):
+        self.device_file = "/sys/bus/w1/devices/28-*/w1_slave"
+    
+    def read(self) -> float:
+        """Lecture de la température"""
+        try:
+            with open(self.device_file, 'r') as f:
+                lines = f.readlines()
+                if lines[0].strip()[-3:] == 'YES':
+                    temp_line = lines[1]
+                    temp_data = temp_line.split('=')[1]
+                    temp_celsius = float(temp_data) / 1000.0
+                    return temp_celsius
+        except Exception as e:
+            print(f"Erreur lecture DS18B20: {e}")
+        return None
+
+class AtlasScientificSensor:
+    """Capteurs Atlas Scientific (I2C)"""
+    def __init__(self, address: int, sensor_type: str):
+        self.address = address
+        self.sensor_type = sensor_type
+        self.bus = smbus.SMBus(1)
+    
+    def read(self) -> float:
+        """Lecture du capteur"""
+        try:
+            # Envoi de la commande de lecture
+            self.bus.write_i2c_block_data(self.address, 0x52, [0x00])
+            time.sleep(1)
+            
+            # Lecture de la réponse
+            response = self.bus.read_i2c_block_data(self.address, 0x52, 32)
+            value = ''.join([chr(x) for x in response if x != 0])
+            
+            if self.sensor_type == 'salinity':
+                return float(value.split(',')[0])
+            elif self.sensor_type == 'ph':
+                return float(value)
+            elif self.sensor_type == 'do':
+                return float(value)
+                
+        except Exception as e:
+            print(f"Erreur lecture {self.sensor_type}: {e}")
+        return None
+\end{lstlisting}
+
+\section{Contrôleur de moteurs (motor\_controller.py)}
+\begin{lstlisting}[language=Python, caption=Contrôleur des moteurs, label=lst:motor-controller]
+import RPi.GPIO as GPIO
+import time
+from typing import Tuple
+
+class MotorController:
+    def __init__(self):
+        """Initialisation du contrôleur de moteurs"""
+        # Configuration des broches GPIO
+        self.left_motor_pins = (17, 18, 27)   # IN1, IN2, PWM
+        self.right_motor_pins = (22, 23, 24)  # IN1, IN2, PWM
+        
+        GPIO.setmode(GPIO.BCM)
+        self.setup_motors()
+        
+    def setup_motors(self):
+        """Configuration des broches GPIO pour les moteurs"""
+        for pins in [self.left_motor_pins, self.right_motor_pins]:
+            for pin in pins:
+                GPIO.setup(pin, GPIO.OUT)
+        
+        # Configuration PWM
+        self.left_pwm = GPIO.PWM(self.left_motor_pins[2], 100)
+        self.right_pwm = GPIO.PWM(self.right_motor_pins[2], 100)
+        self.left_pwm.start(0)
+        self.right_pwm.start(0)
+    
+    def set_motor_speed(self, left_speed: float, right_speed: float):
+        """Contrôle de la vitesse des moteurs"""
+        # Limitation de la vitesse entre -100 et 100
+        left_speed = max(-100, min(100, left_speed))
+        right_speed = max(-100, min(100, right_speed))
+        
+        # Contrôle du moteur gauche
+        if left_speed > 0:
+            GPIO.output(self.left_motor_pins[0], GPIO.HIGH)
+            GPIO.output(self.left_motor_pins[1], GPIO.LOW)
+            self.left_pwm.ChangeDutyCycle(abs(left_speed))
+        elif left_speed < 0:
+            GPIO.output(self.left_motor_pins[0], GPIO.LOW)
+            GPIO.output(self.left_motor_pins[1], GPIO.HIGH)
+            self.left_pwm.ChangeDutyCycle(abs(left_speed))
+        else:
+            GPIO.output(self.left_motor_pins[0], GPIO.LOW)
+            GPIO.output(self.left_motor_pins[1], GPIO.LOW)
+            self.left_pwm.ChangeDutyCycle(0)
+        
+        # Contrôle du moteur droit
+        if right_speed > 0:
+            GPIO.output(self.right_motor_pins[0], GPIO.HIGH)
+            GPIO.output(self.right_motor_pins[1], GPIO.LOW)
+            self.right_pwm.ChangeDutyCycle(abs(right_speed))
+        elif right_speed < 0:
+            GPIO.output(self.right_motor_pins[0], GPIO.LOW)
+            GPIO.output(self.right_motor_pins[1], GPIO.HIGH)
+            self.right_pwm.ChangeDutyCycle(abs(right_speed))
+        else:
+            GPIO.output(self.right_motor_pins[0], GPIO.LOW)
+            GPIO.output(self.right_motor_pins[1], GPIO.LOW)
+            self.right_pwm.ChangeDutyCycle(0)
+    
+    def move_forward(self, speed: float = 50):
+        """Mouvement vers l'avant"""
+        self.set_motor_speed(speed, speed)
+    
+    def move_backward(self, speed: float = 50):
+        """Mouvement vers l'arrière"""
+        self.set_motor_speed(-speed, -speed)
+    
+    def turn_left(self, speed: float = 50):
+        """Rotation vers la gauche"""
+        self.set_motor_speed(-speed, speed)
+    
+    def turn_right(self, speed: float = 50):
+        """Rotation vers la droite"""
+        self.set_motor_speed(speed, -speed)
+    
+    def stop(self):
+        """Arrêt des moteurs"""
+        self.set_motor_speed(0, 0)
+    
+    def cleanup(self):
+        """Nettoyage des ressources GPIO"""
+        self.stop()
+        self.left_pwm.stop()
+        self.right_pwm.stop()
+        GPIO.cleanup()
+\end{lstlisting}
+
+\section{Système de navigation (navigation.py)}
+\begin{lstlisting}[language=Python, caption=Système de navigation, label=lst:navigation-system]
+import math
+import time
+from typing import Dict, Tuple, List
+
+class NavigationSystem:
+    def __init__(self):
+        """Initialisation du système de navigation"""
+        self.current_position = (0, 0)  # (latitude, longitude)
+        self.target_position = (0, 0)
+        self.current_heading = 0  # degrés
+        self.waypoints = []
+        self.current_waypoint_index = 0
+        
+    def set_target(self, lat: float, lon: float):
+        """Définition de la position cible"""
+        self.target_position = (lat, lon)
+    
+    def add_waypoint(self, lat: float, lon: float):
+        """Ajout d'un point de passage"""
+        self.waypoints.append((lat, lon))
+    
+    def calculate_bearing(self, start: Tuple[float, float], 
+                         end: Tuple[float, float]) -> float:
+        """Calcul du cap entre deux points"""
+        lat1, lon1 = math.radians(start[0]), math.radians(start[1])
+        lat2, lon2 = math.radians(end[0]), math.radians(end[1])
+        
+        d_lon = lon2 - lon1
+        
+        y = math.sin(d_lon) * math.cos(lat2)
+        x = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(d_lon)
+        
+        bearing = math.atan2(y, x)
+        return math.degrees(bearing) % 360
+    
+    def calculate_distance(self, start: Tuple[float, float], 
+                          end: Tuple[float, float]) -> float:
+        """Calcul de la distance entre deux points (formule de Haversine)"""
+        lat1, lon1 = math.radians(start[0]), math.radians(start[1])
+        lat2, lon2 = math.radians(end[0]), math.radians(end[1])
+        
+        d_lat = lat2 - lat1
+        d_lon = lon2 - lon1
+        
+        a = (math.sin(d_lat/2)**2 + 
+             math.cos(lat1) * math.cos(lat2) * math.sin(d_lon/2)**2)
+        c = 2 * math.asin(math.sqrt(a))
+        
+        # Rayon de la Terre en mètres
+        r = 6371000
+        return r * c
+    
+    def update_position(self, lat: float, lon: float, heading: float):
+        """Mise à jour de la position actuelle"""
+        self.current_position = (lat, lon)
+        self.current_heading = heading
+    
+    def get_navigation_commands(self) -> Dict[str, float]:
+        """Calcul des commandes de navigation"""
+        if not self.waypoints:
+            return {'left_speed': 0, 'right_speed': 0}
+        
+        # Sélection du waypoint actuel
+        target = self.waypoints[self.current_waypoint_index]
+        
+        # Calcul du cap et de la distance
+        target_bearing = self.calculate_bearing(self.current_position, target)
+        distance = self.calculate_distance(self.current_position, target)
+        
+        # Calcul de l'erreur de cap
+        heading_error = target_bearing - self.current_heading
+        
+        # Normalisation de l'erreur entre -180 et 180 degrés
+        while heading_error > 180:
+            heading_error -= 360
+        while heading_error < -180:
+            heading_error += 360
+        
+        # Contrôle proportionnel simple
+        kp = 2.0  # Gain proportionnel
+        turn_speed = kp * heading_error
+        
+        # Limitation de la vitesse de rotation
+        max_turn_speed = 30
+        turn_speed = max(-max_turn_speed, min(max_turn_speed, turn_speed))
+        
+        # Vitesse de base
+        base_speed = 40
+        
+        # Calcul des vitesses des moteurs
+        left_speed = base_speed - turn_speed
+        right_speed = base_speed + turn_speed
+        
+        # Vérification si le waypoint est atteint
+        if distance < 5:  # 5 mètres de tolérance
+            self.current_waypoint_index += 1
+            if self.current_waypoint_index >= len(self.waypoints):
+                # Tous les waypoints atteints
+                return {'left_speed': 0, 'right_speed': 0}
+        
+        return {'left_speed': left_speed, 'right_speed': right_speed}
+    
+    def get_status(self) -> Dict[str, any]:
+        """Statut du système de navigation"""
+        return {
+            'current_position': self.current_position,
+            'target_position': self.target_position,
+            'current_heading': self.current_heading,
+            'waypoints': self.waypoints,
+            'current_waypoint_index': self.current_waypoint_index
+        }
+\end{lstlisting}
+
+\section{Structure des fichiers}
+\begin{table}[!htbp]
+    \centering
+    \caption{Structure des fichiers du projet AquaDrone}
+    \label{tab:file-structure}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Dossier} & \textbf{Fichier} & \textbf{Description} \\
+        \midrule
+        \multirow{4}{*}{/} & main.py & Programme principal \\
+        & requirements.txt & Dépendances Python \\
+        & README.md & Documentation du projet \\
+        & config.yaml & Configuration du système \\
+        \midrule
+        \multirow{5}{*}{/modules} & sensor\_manager.py & Gestion des capteurs \\
+        & motor\_controller.py & Contrôle des moteurs \\
+        & navigation.py & Système de navigation \\
+        & communication.py & Gestion des communications \\
+        & data\_logger.py & Enregistrement des données \\
+        \midrule
+        \multirow{3}{*}{/utils} & gps\_utils.py & Utilitaires GPS \\
+        & math\_utils.py & Fonctions mathématiques \\
+        & logger.py & Système de logging \\
+        \midrule
+        \multirow{2}{*}{/tests} & test\_sensors.py & Tests des capteurs \\
+        & test\_motors.py & Tests des moteurs \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Configuration du système (config.yaml)}
+\begin{lstlisting}[language=YAML, caption=Fichier de configuration, label=lst:config-file]
+# Configuration du système AquaDrone
+system:
+  name: "AquaDrone"
+  version: "1.0.0"
+  log_level: "INFO"
+  update_rate: 10  # Hz
+
+# Configuration des capteurs
+sensors:
+  temperature:
+    type: "DS18B20"
+    enabled: true
+    update_interval: 5  # secondes
+  
+  salinity:
+    type: "Atlas Scientific"
+    address: 0x64
+    enabled: true
+    update_interval: 10
+  
+  ph:
+    type: "Atlas Scientific"
+    address: 0x63
+    enabled: true
+    update_interval: 10
+  
+  dissolved_oxygen:
+    type: "Atlas Scientific"
+    address: 0x61
+    enabled: true
+    update_interval: 10
+  
+  gps:
+    type: "NEO-M8N"
+    enabled: true
+    update_interval: 1
+  
+  compass:
+    type: "HMC5883L"
+    address: 0x1E
+    enabled: true
+    update_interval: 5
+  
+  accelerometer:
+    type: "MPU6050"
+    address: 0x68
+    enabled: true
+    update_interval: 10
+
+# Configuration des moteurs
+motors:
+  left:
+    pins: [17, 18, 27]  # IN1, IN2, PWM
+    max_speed: 100
+    acceleration: 10
+  
+  right:
+    pins: [22, 23, 24]  # IN1, IN2, PWM
+    max_speed: 100
+    acceleration: 10
+
+# Configuration de la navigation
+navigation:
+  max_speed: 80
+  turn_speed: 30
+  waypoint_tolerance: 5  # mètres
+  heading_tolerance: 5   # degrés
+
+# Configuration des communications
+communication:
+  mlo5:
+    enabled: true
+    frequency: 868000000  # Hz
+    power: 14  # dBm
+  
+  wifi:
+    enabled: true
+    ssid: "AquaDrone_AP"
+    password: "aquadrone2024"
+  
+  ethernet:
+    enabled: true
+    ip: "192.168.1.100"
+    port: 8080
+
+# Configuration du logging
+logging:
+  file: "aquadrone.log"
+  max_size: "10MB"
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+\end{lstlisting}
+
+\section{Notes de développement}
+\begin{itemize}
+    \item \textbf{Version Python} : 3.8+ recommandé pour la compatibilité
+    \item \textbf{Dépendances} : Voir requirements.txt pour la liste complète
+    \item \textbf{Licence} : MIT License pour le code source
+    \item \textbf{Documentation} : Docstrings en format Google Style
+    \item \textbf{Tests} : Utilisation de pytest pour les tests unitaires
+    \item \textbf{Formatage} : Respect des conventions PEP 8
+\end{itemize} 

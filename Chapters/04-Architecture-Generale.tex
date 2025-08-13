@@ -54,7 +54,7 @@ L'architecture technique du système AquaDrone repose sur une approche distribu�
 \subsubsection{Module de capteurs}
 \begin{itemize}
     \item \textbf{Capteurs environnementaux} : Température, salinité, pH
-    \item \textbf{Capteurs de navigation} : GPS, boussole, accéléromètre
+    \item \textbf{Capteurs de navigation} : \gls{gps}, boussole, accéléromètre
     \item \textbf{Capteurs de vision} : Caméras et systèmes d'imagerie
 \end{itemize}
 
@@ -71,12 +71,12 @@ La sélection des composants matériels a été guidée par les exigences de rob
         \textbf{Type de capteur} & \textbf{Modèle} & \textbf{Spécifications} & \textbf{Interface} \\ 
         \midrule
         Température & DS18B20 & -55°C à +125°C, ±0.5°C & 1-Wire \\
-        Salinité & Atlas Scientific & 0-180 ppt, ±2 ppt & I2C \\
-        pH & Atlas Scientific & 0-14 pH, ±0.1 pH & I2C \\
-        Oxygène dissous & Atlas Scientific & 0-20 mg/L, ±0.1 mg/L & I2C \\
-        GPS & NEO-M8N & Précision 2.5m & UART \\
-        Boussole & HMC5883L & ±8 gauss, ±1-2° & I2C \\
-        Accéléromètre & MPU6050 & ±2g, ±4g, ±8g, ±16g & I2C \\
+        Salinité & Atlas Scientific & 0-180 ppt, ±2 ppt & \gls{i2c} \\
+        pH & Atlas Scientific & 0-14 pH, ±0.1 pH & \gls{i2c} \\
+        Oxygène dissous & Atlas Scientific & 0-20 mg/L, ±0.1 mg/L & \gls{i2c} \\
+        \gls{gps} & NEO-M8N & Précision 2.5m & \gls{uart} \\
+        Boussole & HMC5883L & ±8 gauss, ±1-2° & \gls{i2c} \\
+        Accéléromètre & MPU6050 & ±2g, ±4g, ±8g, ±16g & \gls{i2c} \\
         \bottomrule
     \end{tabular}
 \end{table}

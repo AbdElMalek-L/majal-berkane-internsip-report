@@ -5,17 +5,17 @@
 \parindent0pt
 
 \section{Introduction}
-Ce chapitre présente la conception 3D complète du système AquaDrone réalisée avec SolidWorks. La modélisation 3D constitue une étape cruciale du développement, permettant de valider la conception avant la fabrication et d'optimiser l'intégration des différents composants.
+Ce chapitre présente la conception \gls{3d} et la modélisation du système AquaDrone, détaillant l'architecture générale de l'assemblage et l'intégration des composants dans un environnement de conception assistée par ordinateur.
 
 \begin{block}[note]
-La conception 3D a été réalisée en parallèle avec le développement technique, permettant une validation continue de la faisabilité et de l'optimisation de l'architecture mécanique du véhicule.
+La modélisation \gls{3d} permet de visualiser et valider l'architecture du système avant la fabrication, facilitant l'optimisation de la conception et la détection précoce des problèmes d'intégration.
 \end{block}
 
 \section{Architecture générale de l'assemblage}
-Le système AquaDrone est conçu selon une architecture modulaire basée sur un design catamaran, offrant une stabilité hydrodynamique optimale et une organisation claire des différents sous-systèmes.
+L'architecture générale de l'assemblage suit une approche modulaire, où chaque composant est conçu pour s'intégrer harmonieusement dans l'ensemble du système. La géométrie des composants est optimisée pour minimiser la résistance hydrodynamique et maximiser la stabilité en mer.
 
 \subsection{Assemblage principal}
-L'assemblage principal (\texttt{Assem1.SLDASM}) constitue la structure complète du véhicule, intégrant tous les sous-ensembles et composants dans une configuration finale optimisée pour les opérations marines.
+L'assemblage principal (\texttt{Assem1.SLDASM}) constitue la structure complète du véhicule, intégrant tous les sous-ensembles et composants dans une configuration finale optimisée pour les opérations marines. Les dimensions principales sont définies par les contraintes de stabilité et de performance, avec un angle d'incidence optimal de \gls{alpha} = 15° pour la coque.
 
 \begin{figure}[!htpb]
     \centering
@@ -28,6 +28,8 @@ L'assemblage principal (\texttt{Assem1.SLDASM}) constitue la structure complète
 Le système est organisé en plusieurs sous-assemblages logiques, facilitant la maintenance, la fabrication et l'évolution du design.
 
 \subsubsection{Coque et structure}
+Les coques du catamaran sont conçues avec un profil hydrodynamique optimisé pour minimiser la résistance à l'avancement. La géométrie suit les principes de la théorie des fluides, avec un coefficient de traînée \gls{beta} optimisé pour les vitesses de croisière.
+
 \begin{itemize}
     \setlength{\itemsep}{.375em}
     \item \textbf{CORSS\_DECK.SLDASM} : Pont de liaison entre les deux coques du catamaran
@@ -55,6 +57,8 @@ Le système est organisé en plusieurs sous-assemblages logiques, facilitant la 
 \end{figure}
 
 \subsubsection{Système de propulsion}
+Le système de propulsion utilise des moteurs brushless pour une efficacité optimale. La puissance de propulsion est calculée selon la formule P = \gls{omega} × \gls{tau}, où \gls{omega} représente la vitesse angulaire et \gls{tau} le couple moteur.
+
 \begin{itemize}
     \setlength{\itemsep}{.375em}
     \item \textbf{RUSSTER.SLDASM} : Ensemble de propulsion et de direction

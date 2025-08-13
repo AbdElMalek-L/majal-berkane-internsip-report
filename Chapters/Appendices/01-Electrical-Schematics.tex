@@ -1,0 +1,135 @@
+\chapter{Schémas Électriques et Connexions}
+\label{app:electrical-schematics}
+
+Ce chapitre présente les schémas électriques détaillés du système AquaDrone, incluant les connexions des capteurs, la distribution d'énergie et l'interconnexion des modules électroniques.
+
+\section{Schéma électrique général}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Figures/electrical-schematics/main-electrical}
+    \caption{Schéma électrique général du système AquaDrone}
+    \label{fig:main-electrical}
+\end{figure}
+
+\section{Distribution d'énergie}
+\subsection{Système de batteries}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/electrical-schematics/battery-system}
+    \caption{Système de batteries et distribution d'énergie}
+    \label{fig:battery-system}
+\end{figure}
+
+\subsection{Chargement solaire}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/electrical-schematics/solar-charging}
+    \caption{Système de chargement solaire et régulation}
+    \label{fig:solar-charging}
+\end{figure}
+
+\section{Connexions des capteurs}
+\subsection{Interface I2C}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/electrical-schematics/i2c-sensors}
+    \caption{Connexions I2C des capteurs environnementaux}
+    \label{fig:i2c-sensors}
+\end{figure}
+
+\subsection{Interface 1-Wire}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/electrical-schematics/onewire-sensors}
+    \caption{Connexions 1-Wire des capteurs de température}
+    \label{fig:onewire-sensors}
+\end{figure}
+
+\section{Contrôle des moteurs}
+\subsection{Contrôleurs de moteurs}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/electrical-schematics/motor-control}
+    \caption{Schéma de contrôle des moteurs de propulsion}
+    \label{fig:motor-control}
+\end{figure}
+
+\subsection{Interface PWM}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/electrical-schematics/pwm-interface}
+    \caption{Interface PWM pour le contrôle de vitesse}
+    \label{fig:pwm-interface}
+\end{figure}
+
+\section{Communication et réseau}
+\subsection{Module MLO5}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/electrical-schematics/mlo5-connection}
+    \caption{Connexions du module de communication MLO5}
+    \label{fig:mlo5-connection}
+\end{figure}
+
+\subsection{Interface Ethernet et Wi-Fi}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/electrical-schematics/network-interfaces}
+    \caption{Interfaces réseau Ethernet et Wi-Fi}
+    \label{fig:network-interfaces}
+\end{figure}
+
+\section{Spécifications techniques}
+\subsection{Caractéristiques électriques}
+\begin{table}[!htbp]
+    \centering
+    \caption{Spécifications électriques du système}
+    \label{tab:electrical-specs}
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Paramètre} & \textbf{Valeur} & \textbf{Unité} & \textbf{Remarques} \\
+        \midrule
+        Tension nominale & 12 & V & Système principal \\
+        Tension de charge & 14.4 & V & Chargeur solaire \\
+        Courant max. continu & 20 & A & Propulsion \\
+        Courant max. capteurs & 2 & A & Capteurs et contrôle \\
+        Puissance max. totale & 240 & W & Tous systèmes \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Protection et sécurité}
+\begin{itemize}
+    \item \textbf{Fusibles} : Protection des circuits principaux (20A, 5A, 2A)
+    \item \textbf{Parafoudres} : Protection contre les surtensions
+    \item \textbf{Isolation galvanique} : Séparation des circuits sensibles
+    \item \textbf{Mise à la terre} : Connexion à la coque métallique
+\end{itemize}
+
+\section{Liste des composants électroniques}
+\begin{table}[!htbp]
+    \centering
+    \caption{Nomenclature des composants électroniques}
+    \label{tab:electronic-components}
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Référence} & \textbf{Désignation} & \textbf{Quantité} & \textbf{Spécifications} \\
+        \midrule
+        EL-001 & Raspberry Pi 4 & 1 & 4GB RAM, 1.5GHz \\
+        EL-002 & Module MLO5 & 1 & Communication LoRa \\
+        EL-003 & Contrôleur moteur L298N & 2 & Double pont H \\
+        EL-004 & Régulateur de tension & 1 & 12V/5V, 3A \\
+        EL-005 & Module relais & 1 & 4 canaux, 5V \\
+        EL-006 & Hub USB & 1 & 4 ports, alimenté \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Notes d'installation}
+\begin{itemize}
+    \item Toutes les connexions doivent être protégées contre l'humidité
+    \item Utiliser des connecteurs étanches pour les connexions externes
+    \item Respecter les sections de câbles selon les courants nominaux
+    \item Tester toutes les connexions avant la mise en service
+    \item Documenter les modifications apportées au câblage
+\end{itemize} 

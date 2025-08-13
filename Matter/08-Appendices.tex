@@ -1,7 +1,7 @@
 \ifthenelse{\equal{\LanguageOption}{french}}{
-    \addtocontents{toc}{\protect\contentsline{chapter}{Annexes}{}{}}
+    \addtocontents{toc}{\protect\contentsline{chapter}{Annexes Techniques}{}{}}
 }{
-    \addtocontents{toc}{\protect\contentsline{chapter}{Appendices}{}{}}
+    \addtocontents{toc}{\protect\contentsline{chapter}{Technical Appendices}{}{}}
 }
 
 \ifthenelse{\equal{\MediaOption}{paper}}{\blankpage}{\clearpage}
@@ -10,9 +10,9 @@
         
     \vspace*{\fill}
     \ifthenelse{\equal{\LanguageOption}{french}}{%
-        {\LARGE\fontsize{26}{26}\selectfont\textcolor{maincolor}{Annexes}\par}
+        {\LARGE\fontsize{26}{26}\selectfont\textcolor{maincolor}{Annexes Techniques}\par}
     }{%
-        {\LARGE\fontsize{26}{26}\selectfont\textcolor{maincolor}{Appendices}\par}
+        {\LARGE\fontsize{26}{26}\selectfont\textcolor{maincolor}{Technical Appendices}\par}
     }
     \vspace*{\fill}
 \end{center}

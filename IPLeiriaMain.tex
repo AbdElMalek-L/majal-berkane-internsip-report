@@ -35,9 +35,6 @@
 \include{Matter/00-Cover}
 \include{Matter/01-Front-Page}
 
-%%% Copyright Statement %%%
-% \include{Matter/02-Copyright}
-
 %%% Roman Numeration %%%
 \pagenumbering{roman}
 
@@ -63,7 +60,7 @@
 %%% Arabic Numeration %%%
 \pagenumbering{arabic}
 
-%%% Chapters (**Insert Yours Here**) %%%
+%%% Main Chapters %%%
 \include{Chapters/00-Introduction-Generale}
 \include{Chapters/01-Problematique}
 \include{Chapters/02-Presentation-Organisme}
@@ -73,23 +70,17 @@
 \include{Chapters/08-Conception-3D}
 \include{Chapters/06-Assemblage-Tests}
 \include{Chapters/07-Conclusion-Generale}
-\include{Chapters/01-Introduction}
-\include{Chapters/02-User-Guide}
-\include{Chapters/03-Latex-Tutorial}
 
 %%% Bibliography %%%
 \renewcommand{\refname}{Bibliography}
 \printbibliography[title={\refname},heading=bibintoc]
 
-%%% Appendices: Work that *YOU* Developed %%%
+%%% Appendices: Technical Documentation %%%
 \appendix
-\input{Matter/08-Appendices}
-\input{Chapters/Appendices/00-AppendixA}
-\input{Chapters/Appendices/01-AppendixB}
-
-%%% Annexes: Work that *YOU DID NOT* Develop %%%
-\input{Matter/09-Annexes}
-\input{Chapters/Annexes/00-AnnexA}
+\include{Matter/08-Appendices}
+\include{Chapters/Appendices/00-Technical-Drawings}
+\include{Chapters/Appendices/01-Electrical-Schematics}
+% \include{Chapters/Appendices/02-Software-Code}
 
 %%% Back Page %%%
 \input{Matter/10-Back-Page}
