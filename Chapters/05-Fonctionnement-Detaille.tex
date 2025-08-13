@@ -1,0 +1,181 @@
+\chapter[Fonctionnement détaillé du système]{Fonctionnement détaillé du système}
+\label{cp:fonctionnement-detaille}
+
+{
+\parindent0pt
+
+\section{Introduction}
+Ce chapitre détaille le fonctionnement interne du système AquaDrone, expliquant comment les différents composants interagissent pour assurer le bon fonctionnement du véhicule autonome. L'accent est mis sur l'acquisition des données, la transmission, le traitement et l'intégration mécanique.
+
+\section{Acquisition des données capteurs}
+Le système d'acquisition de données constitue le cœur du système de perception d'AquaDrone, permettant de collecter des informations essentielles sur l'environnement marin et l'état du véhicule.
+
+\begin{block}[note]
+La diversité des interfaces de communication utilisées (I2C, SPI, UART, Ethernet, analogique) permet d'intégrer une large gamme de capteurs tout en optimisant les performances et la fiabilité du système.
+\end{block}
+
+\subsection{Interfaces de communication}
+\subsubsection{Interface I2C (Inter-Integrated Circuit)}
+L'interface I2C est utilisée pour la majorité des capteurs environnementaux :
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Avantages} : Communication bidirectionnelle, adressage multiple, faible consommation
+    \item \textbf{Implémentation} : Utilisation des broches GPIO 2 (SDA) et 3 (SCL) du Raspberry Pi
+    \item \textbf{Capteurs connectés} : Salinité, pH, oxygène dissous, boussole, accéléromètre
+\end{itemize}
+
+\subsubsection{Interface SPI (Serial Peripheral Interface)}
+L'interface SPI est réservée aux capteurs nécessitant une communication haute vitesse :
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Caractéristiques} : Communication full-duplex, haute vitesse, synchronisation par horloge
+    \item \textbf{Configuration} : Broches GPIO 10 (MOSI), 9 (MISO), 11 (SCLK), 8 (CE0)
+    \item \textbf{Applications} : Capteurs haute fréquence, cartes mémoire, communications radio
+\end{itemize}
+
+\subsubsection{Interface UART (Universal Asynchronous Receiver-Transmitter)}
+L'interface UART est utilisée pour la communication série avec certains modules :
+\begin{itemize}
+    \item \textbf{Spécifications} : Communication asynchrone, configuration flexible des paramètres
+    \item \textbf{Utilisation} : Module GPS, communication avec d'autres systèmes embarqués
+    \item \textbf{Configuration} : Broches GPIO 14 (TXD) et 15 (RXD)
+\end{itemize}
+
+\subsubsection{Interface Ethernet}
+L'interface Ethernet constitue la principale voie de communication réseau :
+\begin{itemize}
+    \item \textbf{Capacités} : Gigabit Ethernet pour les transferts de données volumineuses
+    \item \textbf{Applications} : Communication avec la station distante, mise à jour des logiciels
+    \item \textbf{Sécurité} : Implémentation de protocoles de sécurité et de chiffrement
+\end{itemize}
+
+\subsubsection{Entrées analogiques}
+Les entrées analogiques permettent de mesurer des signaux continus :
+\begin{itemize}
+    \item \textbf{Convertisseur} : ADC (Analog-to-Digital Converter) pour la conversion des signaux
+    \item \textbf{Mesures} : Tension des batteries, courant des moteurs, signaux de certains capteurs
+    \item \textbf{Précision} : Résolution de 12 bits pour une précision suffisante
+\end{itemize}
+
+\section{Transmission des données vers la station distante via MLO5}
+Le module MLO5 constitue la solution de communication longue distance du système, permettant de maintenir une liaison constante avec la station de contrôle distante.
+
+\subsection{Protocoles de communication}
+\subsubsection{TCP/IP (Transmission Control Protocol/Internet Protocol)}
+Le protocole TCP/IP est utilisé pour les communications nécessitant une fiabilité maximale :
+\begin{itemize}
+    \item \textbf{Applications} : Transmission des données critiques, commandes de contrôle
+    \item \textbf{Caractéristiques} : Connexion orientée, retransmission automatique, contrôle de flux
+    \item \textbf{Configuration} : Ports dédiés pour différents types de données
+\end{itemize}
+
+\subsubsection{UDP (User Datagram Protocol)}
+Le protocole UDP est utilisé pour les transmissions en temps réel :
+\begin{itemize}
+    \item \textbf{Applications} : Streaming vidéo, données de navigation en temps réel
+    \item \textbf{Avantages} : Faible latence, pas de surcharge de contrôle
+    \item \textbf{Inconvénients} : Pas de garantie de livraison, pas de contrôle de flux
+\end{itemize}
+
+\subsubsection{MQTT (Message Queuing Telemetry Transport)}
+Le protocole MQTT est utilisé pour la communication légère et efficace :
+\begin{itemize}
+    \item \textbf{Caractéristiques} : Architecture publish/subscribe, faible surcharge
+    \item \textbf{Applications} : Télémétrie, notifications d'état, commandes de configuration
+    \item \textbf{Avantages} : Efficacité énergétique, support des connexions instables
+\end{itemize}
+
+\subsubsection{RTSP (Real Time Streaming Protocol)}
+Le protocole RTSP est utilisé pour le streaming vidéo en temps réel :
+\begin{itemize}
+    \item \textbf{Fonctionnalités} : Contrôle du streaming, pause, reprise, navigation
+    \item \textbf{Applications} : Surveillance en temps réel, enregistrement vidéo
+    \item \textbf{Intégration} : Compatible avec la plupart des lecteurs vidéo
+\end{itemize}
+
+\subsection{Sécurité et fiabilité en environnement maritime}
+\subsubsection{Chiffrement des communications}
+\begin{itemize}
+    \item \textbf{Protocoles} : TLS/SSL pour le chiffrement des données sensibles
+    \item \textbf{Authentification} : Certificats numériques et clés de chiffrement
+    \item \textbf{Intégrité} : Vérification de l'intégrité des données transmises
+\end{itemize}
+
+\subsubsection{Gestion des déconnexions}
+\begin{itemize}
+    \item \textbf{Détection} : Surveillance continue de la qualité de la connexion
+    \item \textbf{Reconnexion} : Tentatives automatiques de reconnexion en cas de perte
+    \item \textbf{Mise en cache} : Stockage local des données en cas de déconnexion
+\end{itemize}
+
+\section{Gestion et traitement des données}
+Le système de gestion et de traitement des données assure la collecte, la validation et l'analyse des informations collectées par les différents capteurs.
+
+\subsection{Collecte et validation}
+\begin{itemize}
+    \item \textbf{Acquisition} : Collecte continue des données selon des intervalles prédéfinis
+    \item \textbf{Validation} : Vérification de la cohérence et de la validité des mesures
+    \item \textbf{Filtrage} : Élimination des valeurs aberrantes et des bruits de mesure
+\end{itemize}
+
+\subsection{Traitement et analyse}
+\begin{itemize}
+    \item \textbf{Prétraitement} : Normalisation et calibration des données brutes
+    \item \textbf{Analyse} : Calcul de paramètres dérivés et d'indicateurs de performance
+    \item \textbf{Stockage} : Sauvegarde locale et transmission vers la station distante
+\end{itemize}
+
+\section{Conception 3D et intégration mécanique avec SolidWorks}
+La conception 3D et l'intégration mécanique constituent des aspects cruciaux du développement d'AquaDrone, assurant la cohérence et la robustesse du système.
+
+\subsection{Modélisation 3D du véhicule et des modules}
+\subsubsection{Structure principale}
+\begin{itemize}
+    \item \textbf{Coque} : Conception hydrodynamique optimisée pour la stabilité et la performance
+    \item \textbf{Compartiments} : Organisation modulaire des différents systèmes
+    \item \textbf{Matériaux} : Sélection de matériaux résistants à la corrosion saline
+\end{itemize}
+
+\subsubsection{Modules fonctionnels}
+\begin{itemize}
+    \item \textbf{Module de propulsion} : Intégration des moteurs et des hélices
+    \item \textbf{Module électronique} : Protection et organisation des composants électroniques
+    \item \textbf{Module de capteurs} : Positionnement optimal des différents capteurs
+\end{itemize}
+
+\subsection{Intégration des capteurs et actionneurs}
+\subsubsection{Positionnement des capteurs}
+\begin{itemize}
+    \item \textbf{Capteurs environnementaux} : Immersion optimale pour des mesures précises
+    \item \textbf{Capteurs de navigation} : Positionnement pour minimiser les interférences
+    \item \textbf{Capteurs de vision} : Orientation et protection contre les projections d'eau
+\end{itemize}
+
+\subsubsection{Intégration des actionneurs}
+\begin{itemize}
+    \item \textbf{Moteurs de propulsion} : Alignement et protection contre l'eau
+    \item \textbf{Système de direction} : Mécanisme robuste et fiable
+    \item \textbf{Actionneurs auxiliaires} : Intégration des systèmes de contrôle
+\end{itemize}
+
+\subsection{Simulation hydrodynamique et tests de stabilité}
+\subsubsection{Analyse hydrodynamique}
+\begin{itemize}
+    \item \textbf{Simulation CFD} : Analyse des écoulements et des forces hydrodynamiques
+    \item \textbf{Optimisation} : Ajustement de la forme pour minimiser la résistance
+    \item \textbf{Validation} : Comparaison avec des tests en bassin d'essais
+\end{itemize}
+
+\subsubsection{Tests de stabilité}
+\begin{itemize}
+    \item \textbf{Calculs de stabilité} : Vérification de la flottabilité et de la stabilité
+    \item \textbf{Simulation de conditions} : Tests dans différentes conditions de mer
+    \item \textbf{Validation} : Vérification de la conformité aux normes maritimes
+\end{itemize}
+
+\section{Conclusion}
+Le fonctionnement détaillé du système AquaDrone démontre la complexité et la sophistication de l'architecture mise en place. L'intégration harmonieuse des différents composants, combinée à une gestion efficace des données et une conception mécanique robuste, permet de créer un système fiable et performant.
+
+Cette compréhension approfondie du fonctionnement interne constitue la base pour les phases d'assemblage, de test et d'optimisation qui seront présentées dans \autoref{cp:assemblage-tests}.
+
+} 

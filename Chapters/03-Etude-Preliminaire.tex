@@ -1,0 +1,184 @@
+\chapter[Étude préliminaire et analyse des besoins]{Étude préliminaire et analyse des besoins}
+\label{cp:etude-preliminaire}
+
+{
+\parindent0pt
+
+\section{Introduction}
+Ce chapitre présente l'étude préliminaire menée pour définir le cadre du projet AquaDrone et analyser les besoins spécifiques associés au développement d'un véhicule autonome multifonction pour applications marines. Cette analyse constitue la base de la conception et de l'implémentation du système.
+
+\section{Généralités sur les USV (Unmanned Surface Vehicles)}
+Les véhicules de surface sans équipage (USV) représentent une catégorie émergente de systèmes robotiques maritimes, offrant de nouvelles possibilités pour la surveillance, la recherche et les applications commerciales en mer.
+
+\subsection{Définition et classification}
+Un USV est un véhicule maritime autonome ou télécommandé, capable de naviguer à la surface de l'eau sans équipage humain à bord. Ces systèmes peuvent être classés selon plusieurs critères :
+\begin{itemize}
+    \item \textbf{Niveau d'autonomie} : Télécommandé, semi-autonome, entièrement autonome
+    \item \textbf{Taille et capacité} : Micro-USV (< 1m), mini-USV (1-3m), USV standard (3-10m), gros USV (> 10m)
+    \item \textbf{Applications} : Surveillance, recherche, pêche, transport, sécurité
+\end{itemize}
+
+\subsection{Avantages des USV}
+\begin{itemize}
+    \item \textbf{Sécurité} : Élimination des risques pour les équipages humains
+    \item \textbf{Efficacité} : Opération continue 24h/24 sans fatigue
+    \item \textbf{Coût} : Réduction des coûts opérationnels à long terme
+    \item \textbf{Flexibilité} : Adaptation rapide aux missions et conditions changeantes
+\end{itemize}
+
+\section{Choix de l'architecture catamaran}
+La conception de l'AquaDrone repose sur l'architecture catamaran, un choix stratégique basé sur une analyse comparative approfondie avec les alternatives monocoques traditionnelles.
+
+\subsection{Analyse comparative : Catamaran vs Monocoque}
+L'évaluation des différentes architectures de coque a été menée en considérant les exigences spécifiques du projet AquaDrone, notamment la stabilité, l'efficacité énergétique et la capacité d'emport.
+
+\subsubsection{Avantages du catamaran}
+\begin{itemize}
+    \item \textbf{Stabilité supérieure} : La largeur entre les coques offre une stabilité transversale exceptionnelle, réduisant significativement le roulis et le tangage
+    \item \textbf{Efficacité hydrodynamique} : Réduction de la résistance à l'avancement grâce à la séparation des coques et à la diminution du volume immergé
+    \item \textbf{Capacité d'emport} : Espace disponible entre les coques pour l'installation d'équipements et de capteurs
+    \item \textbf{Manœuvrabilité} : Contrôle directionnel amélioré grâce à la séparation des propulseurs
+    \item \textbf{Stabilité de plateforme} : Plateforme idéale pour les opérations de télédétection et de surveillance nécessitant une stabilité maximale
+\end{itemize}
+
+\subsubsection{Limitations du monocoque}
+\begin{itemize}
+    \item \textbf{Stabilité limitée} : Tendance au roulis et au tangage en mer agitée, affectant la qualité des mesures
+    \item \textbf{Résistance hydrodynamique} : Volume immergé plus important générant une résistance accrue
+    \item \textbf{Espace contraint} : Limitation de l'espace disponible pour l'installation d'équipements
+    \item \textbf{Consommation énergétique} : Nécessité de puissance supplémentaire pour maintenir la stabilité
+\end{itemize}
+
+\subsection{Justification technique du choix}
+Le choix de l'architecture catamaran pour l'AquaDrone est justifié par plusieurs facteurs techniques critiques :
+
+\subsubsection{Exigences de stabilité}
+Les missions de surveillance maritime et de télédétection nécessitent une plateforme extrêmement stable pour garantir la précision des mesures et la qualité des données collectées. Le catamaran offre une stabilité transversale naturelle qui élimine le besoin de systèmes de stabilisation complexes et énergivores.
+
+\subsubsection{Optimisation énergétique}
+La réduction de la résistance hydrodynamique permet d'optimiser la consommation énergétique, un facteur crucial pour l'autonomie opérationnelle. Cette efficacité est particulièrement importante pour les missions de longue durée en mer.
+
+\subsubsection{Modularité et flexibilité}
+L'espace entre les coques facilite l'installation, la maintenance et la modification des équipements. Cette modularité est essentielle pour un système évolutif devant s'adapter à différentes missions et équipements.
+
+\subsubsection{Adaptation aux conditions marines}
+La conception catamaran est particulièrement adaptée aux conditions marines de la région méditerranéenne et de l'Atlantique marocain, caractérisées par des vagues courtes et une mer souvent agitée.
+
+\subsection{Considérations de conception}
+Le choix de l'architecture catamaran implique des considérations de conception spécifiques :
+
+\begin{itemize}
+    \item \textbf{Optimisation des coques} : Profil hydrodynamique optimisé pour minimiser la résistance et maximiser la stabilité
+    \item \textbf{Structure de liaison} : Conception robuste du pont reliant les coques pour résister aux contraintes mécaniques
+    \item \textbf{Répartition des charges} : Distribution optimale du poids et des équipements entre les coques
+    \item \textbf{Propulsion} : Configuration des propulseurs pour optimiser la manœuvrabilité et l'efficacité
+\end{itemize}
+
+% Placeholder pour figure comparative
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/PezizaTuberosa.jpg}
+    \caption{Comparaison des architectures catamaran et monocoque pour l'AquaDrone}
+    \label{fig:catamaran-comparison}
+\end{figure}
+
+% Placeholder pour figure de conception
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/PezizaTuberosa.jpg}
+    \caption{Principes de conception de l'architecture catamaran de l'AquaDrone}
+    \label{fig:catamaran-design}
+\end{figure}
+
+\section{Contexte du projet AquaDrone}
+Le projet AquaDrone s'inscrit dans le cadre d'une collaboration entre Majal Berkane et des partenaires académiques et industriels, visant à développer une solution innovante pour la surveillance maritime et la télédétection océanographique.
+
+\subsection{Origine et motivation}
+Le projet est né de la constatation des limitations des solutions existantes et de la nécessité de développer des systèmes adaptés aux conditions spécifiques de la région méditerranéenne et de l'Atlantique marocain.
+
+\subsection{Partenaires et collaborations}
+\begin{itemize}
+    \item \textbf{Majal Berkane} : Coordination technique et développement
+    \item \textbf{Institutions académiques} : Recherche fondamentale et validation scientifique
+    \item \textbf{Partners industriels} : Expertise en fabrication et commercialisation
+\end{itemize}
+
+\section{Objectifs spécifiques du projet}
+Le projet AquaDrone vise à atteindre plusieurs objectifs spécifiques, techniquement et fonctionnellement définis.
+
+\subsection{Objectifs techniques}
+\begin{itemize}
+    \item \textbf{Autonomie de navigation} : Capacité de navigation autonome sur des missions prédéfinies
+    \item \textbf{Intégration multi-capteurs} : Fusion de données provenant de différents types de capteurs
+    \item \textbf{Communication robuste} : Transmission fiable des données en environnement maritime
+    \item \textbf{Robustesse environnementale} : Résistance aux conditions marines difficiles
+\end{itemize}
+
+\subsection{Objectifs fonctionnels}
+\begin{itemize}
+    \item \textbf{Surveillance maritime} : Monitoring continu des zones côtières et offshore
+    \item \textbf{Collecte de données} : Acquisition de paramètres océanographiques et environnementaux
+    \item \textbf{Assistance à la pêche} : Support aux activités de pêche durable et éthique
+    \item \textbf{Recherche scientifique} : Contribution aux programmes de recherche océanographique
+\end{itemize}
+
+\section{Analyse des besoins fonctionnels et techniques}
+L'analyse des besoins constitue une étape cruciale pour la conception du système, permettant de définir précisément les fonctionnalités requises et les contraintes à respecter.
+
+\subsection{Missions prévues}
+\subsubsection{Surveillance maritime}
+\begin{itemize}
+    \item \textbf{Surveillance côtière} : Monitoring des zones côtières pour la sécurité et la protection environnementale
+    \item \textbf{Surveillance offshore} : Contrôle des zones maritimes éloignées et des installations offshore
+    \item \textbf{Détection d'intrusions} : Identification et suivi de navires non autorisés
+\end{itemize}
+
+\subsubsection{Pêche assistée}
+\begin{itemize}
+    \item \textbf{Localisation des bancs} : Détection et suivi des bancs de poissons
+    \item \textbf{Évaluation des stocks} : Estimation des populations de poissons
+    \item \textbf{Optimisation des captures} : Réduction des prises accessoires et amélioration de l'efficacité
+\end{itemize}
+
+\subsubsection{Télédétection}
+\begin{itemize}
+    \item \textbf{Paramètres océanographiques} : Mesure de température, salinité, pH, oxygène dissous
+    \item \textbf{Qualité de l'eau} : Détection de polluants et évaluation de la santé des écosystèmes
+    \item \textbf{Météorologie marine} : Collecte de données météorologiques en mer
+\end{itemize}
+
+\subsection{Contraintes identifiées}
+\subsubsection{Contraintes environnementales}
+\begin{itemize}
+    \item \textbf{Conditions météorologiques} : Résistance aux vagues, au vent et aux conditions extrêmes
+    \item \textbf{Corrosion saline} : Protection contre la corrosion en environnement marin
+    \item \textbf{Température} : Fonctionnement dans une large gamme de températures
+\end{itemize}
+
+\subsubsection{Contraintes énergétiques}
+\begin{itemize}
+    \item \textbf{Autonomie} : Capacité d'opération continue pendant plusieurs heures
+    \item \textbf{Recharge} : Stratégies de recharge en mer (solaire, éolien, retour à la base)
+    \item \textbf{Optimisation} : Minimisation de la consommation énergétique
+\end{itemize}
+
+\subsubsection{Contraintes mécaniques}
+\begin{itemize}
+    \item \textbf{Stabilité} : Maintien de la stabilité en mer agitée
+    \item \textbf{Flottabilité} : Conception hydrodynamique optimisée
+    \item \textbf{Maintenance} : Facilité d'accès et de maintenance des composants
+\end{itemize}
+
+\subsubsection{Contraintes de communication}
+\begin{itemize}
+    \item \textbf{Portée} : Communication fiable sur de longues distances
+    \item \textbf{Bande passante} : Transmission de données en temps réel
+    \item \textbf{Sécurité} : Protection des communications contre les interférences et intrusions
+\end{itemize}
+
+\section{Conclusion du chapitre}
+L'analyse préliminaire et l'étude des besoins ont permis de définir un cadre clair pour le projet AquaDrone. Les objectifs identifiés, combinés aux contraintes spécifiques de l'environnement maritime, guideront la conception de l'architecture technique et la sélection des composants du système.
+
+Cette analyse constitue la base de la phase de conception détaillée, permettant de s'assurer que le système final répondra aux exigences fonctionnelles et techniques définies, tout en respectant les contraintes opérationnelles et environnementales spécifiques au domaine maritime.
+
+} 

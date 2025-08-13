@@ -1,0 +1,253 @@
+\chapter[Conception 3D et modélisation]{Conception 3D et modélisation}
+\label{cp:conception-3d}
+
+{
+\parindent0pt
+
+\section{Introduction}
+Ce chapitre présente la conception 3D complète du système AquaDrone réalisée avec SolidWorks. La modélisation 3D constitue une étape cruciale du développement, permettant de valider la conception avant la fabrication et d'optimiser l'intégration des différents composants.
+
+\begin{block}[note]
+La conception 3D a été réalisée en parallèle avec le développement technique, permettant une validation continue de la faisabilité et de l'optimisation de l'architecture mécanique du véhicule.
+\end{block}
+
+\section{Architecture générale de l'assemblage}
+Le système AquaDrone est conçu selon une architecture modulaire basée sur un design catamaran, offrant une stabilité hydrodynamique optimale et une organisation claire des différents sous-systèmes.
+
+\subsection{Assemblage principal}
+L'assemblage principal (\texttt{Assem1.SLDASM}) constitue la structure complète du véhicule, intégrant tous les sous-ensembles et composants dans une configuration finale optimisée pour les opérations marines.
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Vue d'ensemble de l'assemblage principal]{Vue d'ensemble de l'assemblage principal du système AquaDrone montrant l'intégration complète de tous les composants.}
+    \label{fig:assemblage-principal}
+\end{figure}
+
+\subsection{Sous-assemblages}
+Le système est organisé en plusieurs sous-assemblages logiques, facilitant la maintenance, la fabrication et l'évolution du design.
+
+\subsubsection{Coque et structure}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{CORSS\_DECK.SLDASM} : Pont de liaison entre les deux coques du catamaran
+    \item \textbf{HULL\_LEFT.SLDASM} : Coque gauche avec ses composants intégrés
+    \item \textbf{HULL\_RIGHT.SLDASM} : Coque droite avec ses composants intégrés
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/PezizaTuberosa.jpg}
+        \caption{Vue du pont de liaison.}
+        \label{fig:cross-deck}
+    \end{subfigure}
+    \hspace{.5cm}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/PezizaTuberosa.jpg}
+        \caption{Vue des coques assemblées.}
+        \label{fig:hull-assembly}
+    \end{subfigure}
+    \caption{Vues des sous-assemblages de coque et de structure.}
+    \label{fig:coque-structure}
+\end{figure}
+
+\subsubsection{Système de propulsion}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{RUSSTER.SLDASM} : Ensemble de propulsion et de direction
+    \item \textbf{bldc\_motor.SLDPRT} : Moteur brushless pour la propulsion
+    \item \textbf{fan.SLDPRT} : Hélice de propulsion
+    \item \textbf{fan\_blads\_cover.SLDPRT} : Protection des hélices
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Système de propulsion]{Vue détaillée du système de propulsion montrant le moteur brushless, l'hélice et sa protection.}
+    \label{fig:propulsion-system}
+\end{figure}
+
+\section{Composants principaux et leur intégration}
+Chaque composant a été conçu individuellement puis intégré dans l'assemblage global, assurant une compatibilité parfaite et une maintenance facilitée.
+
+\subsection{Structure de base}
+\subsubsection{Coques du catamaran}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{catamaran\_hull\_one.SLDPRT} : Coque principale avec profil hydrodynamique optimisé
+    \item \textbf{catamaran\_hull\_one\_3d\_tow\_knits.SLDPRT} : Coque avec intégration des points de remorquage
+    \item \textbf{catamaran\_top\_hull\_one\_3D.SLDPRT} : Partie supérieure de la coque avec compartiments
+    \item \textbf{top\_hull\_RIGHT.SLDPRT} : Partie supérieure de la coque droite
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Design des coques]{Vue détaillée du design des coques montrant le profil hydrodynamique et l'organisation des compartiments internes.}
+    \label{fig:hull-design}
+\end{figure}
+
+\subsubsection{Pont de liaison}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{catamaran\_cross\_deck\_top.SLDPRT} : Pont supérieur avec accès aux composants
+    \item \textbf{catamaran\_cross\_deck\_bottom.SLDPRT} : Pont inférieur avec renforts structurels
+    \item \textbf{assembly\_trinagle.SLDPRT} : Éléments de renforcement triangulaires
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Détail du pont de liaison]{Vue détaillée du pont de liaison montrant l'organisation des composants et les renforts structurels.}
+    \label{fig:cross-deck-detail}
+\end{figure}
+
+\subsection{Systèmes de capteurs et instrumentation}
+\subsubsection{Équipements de navigation}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{LIDAR.SLDPRT} : Capteur LIDAR pour la navigation et l'évitement d'obstacles
+    \item \textbf{LIDAR\_support.SLDPRT} : Support et protection du capteur LIDAR
+    \item \textbf{180\_camera.SLDPRT} : Caméra panoramique pour la surveillance
+    \item \textbf{entenna.SLDPRT} : Antenne de communication
+    \item \textbf{antenna\_support.SLDPRT} : Support et protection de l'antenne
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/PezizaTuberosa.jpg}
+        \caption{Intégration du LIDAR.}
+        \label{fig:lidar-integration}
+    \end{subfigure}
+    \hspace{.5cm}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/PezizaTuberosa.jpg}
+        \caption{Système de caméra.}
+        \label{fig:camera-system}
+    \end{subfigure}
+    \caption{Intégration des systèmes de capteurs et de navigation.}
+    \label{fig:capteurs-navigation}
+\end{figure}
+
+\subsubsection{Équipements scientifiques}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{aquatroll\_500.SLDPRT} : Sonde multiparamètres pour mesures océanographiques
+    \item \textbf{winch\_base.SLDPRT} : Base du treuil pour déploiement des instruments
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Équipements scientifiques]{Vue des équipements scientifiques intégrés, incluant la sonde AquaTroll et le système de treuil.}
+    \label{fig:equipements-scientifiques}
+\end{figure}
+
+\section{Optimisation de la conception}
+La conception 3D a été optimisée selon plusieurs critères critiques pour les applications marines.
+
+\subsection{Considérations hydrodynamiques}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Profil des coques} : Forme optimisée pour minimiser la résistance à l'avancement
+    \item \textbf{Stabilité} : Design catamaran pour une stabilité maximale en mer agitée
+    \item \textbf{Flottabilité} : Calculs de flottabilité et de stabilité validés par simulation
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Analyse hydrodynamique]{Résultats de l'analyse hydrodynamique montrant les lignes de courant et la distribution des pressions sur la coque.}
+    \label{fig:analyse-hydrodynamique}
+\end{figure}
+
+\subsection{Intégration mécanique}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Modularité} : Conception permettant l'ajout ou le remplacement facile de composants
+    \item \textbf{Maintenance} : Accès facilité aux composants critiques
+    \item \textbf{Protection} : Enveloppes et protections contre l'environnement marin
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Intégration mécanique]{Vue de l'intégration mécanique montrant l'organisation des composants et les accès de maintenance.}
+    \label{fig:integration-mecanique}
+\end{figure}
+
+\section{Simulation et validation}
+La conception 3D a été validée par des simulations numériques et des analyses de performance.
+
+\subsection{Simulations de stabilité}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Calculs de flottabilité} : Validation de la stabilité dans différentes conditions de charge
+    \item \textbf{Analyse de stabilité} : Vérification de la stabilité en conditions de mer difficiles
+    \item \textbf{Simulation de vagues} : Test de comportement en mer agitée
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Simulation de stabilité]{Résultats de la simulation de stabilité montrant le comportement du véhicule dans différentes conditions de mer.}
+    \label{fig:simulation-stabilite}
+\end{figure}
+
+\subsection{Analyses structurales}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Analyse des contraintes} : Vérification de la résistance des composants
+    \item \textbf{Analyse vibratoire} : Étude des modes de vibration et de leur impact
+    \item \textbf{Analyse thermique} : Validation du comportement thermique des composants électroniques
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Analyse structurale]{Résultats de l'analyse structurale montrant la distribution des contraintes et des déformations.}
+    \label{fig:analyse-structurale}
+\end{figure}
+
+\section{Préparation pour la fabrication}
+La conception 3D inclut toutes les informations nécessaires pour la fabrication et l'assemblage.
+
+\subsection{Plans de fabrication}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Dessins techniques} : Plans détaillés pour chaque composant
+    \item \textbf{Cotes et tolérances} : Spécifications précises pour la fabrication
+    \item \textbf{Matériaux} : Définition des matériaux et traitements de surface
+\end{itemize}
+
+\subsection{Instructions d'assemblage}
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Ordre d'assemblage} : Séquence optimisée pour l'assemblage
+    \item \textbf{Outils requis} : Liste des outils et équipements nécessaires
+    \item \textbf{Contrôles qualité} : Points de contrôle à chaque étape de l'assemblage
+\end{itemize}
+
+\begin{figure}[!htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/PezizaTuberosa.jpg}
+    \caption[Séquence d'assemblage]{Diagramme de la séquence d'assemblage montrant l'ordre logique de montage des composants.}
+    \label{fig:sequence-assemblage}
+\end{figure}
+
+\section{Conclusion}
+La conception 3D du système AquaDrone représente une étape majeure du développement, permettant de valider la faisabilité technique et d'optimiser l'intégration des différents composants. L'architecture modulaire adoptée facilite la maintenance et l'évolution future du système.
+
+\begin{block}[tip]
+Cette conception 3D constitue la base pour la fabrication des prototypes et la validation expérimentale des performances du véhicule en conditions réelles.
+\end{block}
+
+Les simulations et analyses réalisées confirment la robustesse de la conception et sa capacité à répondre aux exigences opérationnelles définies. La préparation pour la fabrication est complète et permettra une transition efficace vers la phase de prototypage.
+
+} 

@@ -1,0 +1,168 @@
+\chapter[Architecture générale et composants]{Architecture générale et composants}
+\label{cp:architecture-generale}
+
+{
+\parindent0pt
+
+\section{Introduction}
+Ce chapitre présente l'architecture générale du système AquaDrone, détaillant l'organisation fonctionnelle et technique, ainsi que les composants matériels et logiciels sélectionnés pour répondre aux exigences définies dans l'analyse des besoins.
+
+\section{Architecture fonctionnelle du système}
+L'architecture fonctionnelle du système AquaDrone s'articule autour de plusieurs modules interconnectés, chacun assumant des responsabilités spécifiques dans le fonctionnement global du véhicule.
+
+\begin{block}[note]
+Cette architecture modulaire permet une maintenance facilitée et une évolution du système selon les besoins futurs, tout en garantissant la robustesse et la fiabilité nécessaires en environnement maritime.
+\end{block}
+
+\subsection{Schéma blocs}
+Le système peut être représenté par un schéma fonctionnel organisé en plusieurs niveaux :
+\begin{itemize}
+    \item \textbf{Niveau perception} : Capteurs et systèmes d'acquisition de données
+    \item \textbf{Niveau décision} : Système de contrôle et algorithmes d'intelligence artificielle
+    \item \textbf{Niveau action} : Actionneurs et systèmes de propulsion
+    \item \textbf{Niveau communication} : Interfaces de communication et transmission de données
+\end{itemize}
+
+\subsection{Organigrammes fonctionnels}
+L'organisation fonctionnelle suit une approche modulaire, permettant une maintenance facilitée et une évolution du système selon les besoins futurs.
+
+\section{Architecture technique}
+L'architecture technique du système AquaDrone repose sur une approche distribuée, avec une répartition claire des responsabilités entre les différents modules.
+
+\subsection{Répartition des modules}
+\subsubsection{Module de propulsion}
+\begin{itemize}
+    \item \textbf{Moteurs électriques} : Propulsion principale et direction
+    \item \textbf{Contrôleurs de moteurs} : Gestion de la vitesse et du couple
+    \item \textbf{Système de direction} : Contrôle de la trajectoire
+\end{itemize}
+
+\subsubsection{Module de commande}
+\begin{itemize}
+    \item \textbf{Microcontrôleur principal} : Cerveau du système
+    \item \textbf{Système de navigation} : Calcul de trajectoire et positionnement
+    \item \textbf{Interface utilisateur} : Contrôle et monitoring
+\end{itemize}
+
+\subsubsection{Module de communication}
+\begin{itemize}
+    \item \textbf{Module MLO5} : Communication longue distance
+    \item \textbf{Interfaces réseau} : Ethernet, Wi-Fi, radio
+    \item \textbf{Système de sécurité} : Chiffrement et authentification
+\end{itemize}
+
+\subsubsection{Module de capteurs}
+\begin{itemize}
+    \item \textbf{Capteurs environnementaux} : Température, salinité, pH
+    \item \textbf{Capteurs de navigation} : GPS, boussole, accéléromètre
+    \item \textbf{Capteurs de vision} : Caméras et systèmes d'imagerie
+\end{itemize}
+
+\section{Composants matériels}
+La sélection des composants matériels a été guidée par les exigences de robustesse, de fiabilité et de performance dans l'environnement maritime.
+
+\subsection{Tableau complet des capteurs}
+\begin{table}[!htpb]
+    \caption{Spécifications des capteurs intégrés dans le système AquaDrone.}
+    \label{tab:capteurs}
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Type de capteur} & \textbf{Modèle} & \textbf{Spécifications} & \textbf{Interface} \\ 
+        \midrule
+        Température & DS18B20 & -55°C à +125°C, ±0.5°C & 1-Wire \\
+        Salinité & Atlas Scientific & 0-180 ppt, ±2 ppt & I2C \\
+        pH & Atlas Scientific & 0-14 pH, ±0.1 pH & I2C \\
+        Oxygène dissous & Atlas Scientific & 0-20 mg/L, ±0.1 mg/L & I2C \\
+        GPS & NEO-M8N & Précision 2.5m & UART \\
+        Boussole & HMC5883L & ±8 gauss, ±1-2° & I2C \\
+        Accéléromètre & MPU6050 & ±2g, ±4g, ±8g, ±16g & I2C \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Choix du microcontrôleur (Raspberry Pi 4)}
+Le Raspberry Pi 4 a été sélectionné comme microcontrôleur principal pour plusieurs raisons :
+\begin{itemize}
+    \setlength{\itemsep}{.375em}
+    \item \textbf{Performance} : Processeur ARM Cortex-A72 quad-core à 1.5GHz
+    \item \textbf{Connectivité} : Ethernet Gigabit, Wi-Fi 802.11ac, Bluetooth 5.0
+    \item \textbf{GPIO} : 40 broches GPIO pour l'interface avec les capteurs
+    \item \textbf{Support} : Large communauté et documentation abondante
+    \item \textbf{Coût} : Rapport performance/prix excellent
+\end{itemize}
+
+\begin{block}[tip]
+Le choix du Raspberry Pi 4 offre un excellent équilibre entre performance, connectivité et coût, tout en bénéficiant d'un écosystème logiciel mature et d'une large communauté de développeurs.
+\end{block}
+
+\subsection{Intégration du module MLO5 et protocole réseau}
+Le module MLO5 constitue la solution de communication longue distance du système :
+\begin{itemize}
+    \item \textbf{Technologie} : Communication par satellite ou radio longue distance
+    \item \textbf{Portée} : Couverture mondiale ou régionale selon la configuration
+    \item \textbf{Bande passante} : Adaptée aux besoins de transmission des données
+    \item \textbf{Fiabilité} : Conçu pour les environnements marins difficiles
+\end{itemize}
+
+\section{Outils logiciels et bibliothèques}
+Le développement du système AquaDrone s'appuie sur un ensemble d'outils logiciels et de bibliothèques spécialisées.
+
+\subsection{CAO, simulation, traitement de données, communication}
+\subsubsection{Conception assistée par ordinateur (CAO)}
+\begin{itemize}
+    \item \textbf{SolidWorks} : Modélisation 3D et conception mécanique
+    \item \textbf{Simulation hydrodynamique} : Analyse des performances en mer
+    \item \textbf{Calculs de stabilité} : Vérification de la flottabilité et de la stabilité
+\end{itemize}
+
+\subsubsection{Simulation et modélisation}
+\begin{itemize}
+    \item \textbf{Simulink} : Modélisation des systèmes de contrôle
+    \item \textbf{Gazebo} : Simulation de la navigation et des capteurs
+    \item \textbf{ROS} : Framework pour la robotique
+\end{itemize}
+
+\subsubsection{Traitement de données}
+\begin{itemize}
+    \item \textbf{Python} : Langage principal pour le traitement des données
+    \item \textbf{NumPy/SciPy} : Calculs scientifiques et traitement numérique
+    \item \textbf{OpenCV} : Traitement d'images et vision par ordinateur
+\end{itemize}
+
+\subsubsection{Communication et réseau}
+\begin{itemize}
+    \item \textbf{MQTT} : Protocole de communication légère
+    \item \textbf{TCP/IP} : Communication fiable pour les données critiques
+    \item \textbf{UDP} : Transmission en temps réel pour la vidéo
+    \item \textbf{RTSP} : Streaming vidéo pour la surveillance
+\end{itemize}
+
+\section{Schéma global du système}
+Le schéma global du système AquaDrone illustre l'interconnexion entre tous les modules et composants, montrant le flux de données et de commandes entre les différents éléments du système.
+
+\subsection{Interfaces et connecteurs}
+\begin{itemize}
+    \item \textbf{Interfaces I2C} : Communication avec la plupart des capteurs
+    \item \textbf{Interfaces SPI} : Communication haute vitesse avec certains capteurs
+    \item \textbf{Interfaces UART} : Communication série avec le GPS et autres modules
+    \item \textbf{Interface Ethernet} : Communication réseau principale
+    \item \textbf{Entrées analogiques} : Mesures de tension et de courant
+\end{itemize}
+
+\subsection{Flux de données}
+Le système suit un flux de données unidirectionnel :
+\begin{enumerate}
+    \item Acquisition des données par les capteurs
+    \item Traitement et validation des données
+    \item Prise de décision par le système de contrôle
+    \item Exécution des actions par les actionneurs
+    \item Transmission des données vers la station distante
+\end{enumerate}
+
+\section{Conclusion}
+L'architecture générale du système AquaDrone a été conçue pour répondre aux exigences de robustesse, de modularité et de performance dans l'environnement maritime. La sélection des composants matériels et logiciels a été guidée par ces exigences, permettant de créer un système fiable et évolutif.
+
+Cette architecture constitue la base de l'implémentation détaillée du système, qui sera présentée dans \autoref{cp:fonctionnement-detaille}, avec un focus particulier sur le fonctionnement détaillé et l'intégration des différents composants.
+
+} 
